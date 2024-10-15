@@ -1,7 +1,12 @@
 import { Link, Form } from "react-router-dom";
 
-export async function action() {
-  console.log('Desde action');
+export async function action({ request }: {
+  request: Request
+}) {
+
+  const data = Object.fromEntries(await request.formData())
+  console.log(data);
+
   return {}
 }
 export default function NewProduct() {
