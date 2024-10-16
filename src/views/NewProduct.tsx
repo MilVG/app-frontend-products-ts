@@ -1,8 +1,7 @@
-import { Link, Form, useActionData } from "react-router-dom";
+import { Link, Form, useActionData,ActionFunctionArgs } from "react-router-dom";
+import ErrorMessage from "../components/ErrorMessage";  
 
-export async function action({ request }: {
-  request: Request
-}) {
+export async function action({ request }: ActionFunctionArgs) {
 
   const data = Object.fromEntries(await request.formData())
 
@@ -17,7 +16,7 @@ export async function action({ request }: {
 }
 export default function NewProduct() {
 
-  const error = useActionData()
+  const error = useActionData() as string
   console.log(error);
 
   return (
@@ -29,7 +28,7 @@ export default function NewProduct() {
           className="bg-indigo-600 text-white p-3 text-sm uppercase font-bold rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
         >Regresar a Productos</Link>
       </div>
-
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       <Form
         className="mt-10"
         method="POST"
