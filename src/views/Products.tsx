@@ -1,5 +1,5 @@
-import { Link, useLoaderData } from "react-router-dom";
-import { getProducts } from "../services/ProductService";
+import { ActionFunctionArgs, Link, useLoaderData } from "react-router-dom";
+import { getProducts, updateProductAvailability } from "../services/ProductService";
 import Details from "../components/Details";
 import { Product } from "../types";
 
@@ -7,10 +7,17 @@ export async function loader() {
   const products = await getProducts()
   return products
 }
+
+export async function action({ request }: ActionFunctionArgs) {
+
+  const data = Object.fromEntries(await request.formData())
+  await updateProductAvailability(+data.id)
+  return {}
+}
 export default function Products() {
 
   const products = useLoaderData() as Product[]
-    return (
+  return (
     <>
       <div className="flex justify-between">
         <h2 className="text-4xl font-black text-slate-500">Productos</h2>
@@ -33,12 +40,12 @@ export default function Products() {
             </tr>
           </thead>
           <tbody>
-           {products.map(product => (
+            {products.map(product => (
               <Details
-                  key={product.id}
-                  product={product}
+                key={product.id}
+                product={product}
               />
-           ))} 
+            ))}
           </tbody>
         </table>
       </div>
